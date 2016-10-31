@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:annotation-config/>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/zjsys?connectTimeout=10000&amp;autoReconnect=true&amp;useUnicode=true&amp;zeroDateTimeBehavior=convertToNull"/>
+        <property name="username" value="root"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <!-- 配置异步任务Spring集成, 获得操作接口 -->
+    <bean id="scheduleTaskService" class="com.szzjcs.commons.taskframe.spring.ScheduleTaskServiceFactory">
+        <property name="fetcherType" value="redis"/>
+        <property name="appName" value="test"/>
+    </bean>
+
+    <!-- 装配自己的任务执行类 -->
+    <bean class="com.szzjcs.commons.taskframe.spring.OrderCancelTaskProcessor"/>
+
+</beans>
